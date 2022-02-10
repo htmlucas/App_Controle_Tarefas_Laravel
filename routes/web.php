@@ -1,7 +1,10 @@
 <?php
 
+use App\Mail\MensagemTesteMail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +26,11 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('tarefa','App\Http\Controllers\TarefaController');
 //Route::resource('tarefa','App\Http\Controllers\TarefaController')->middleware('auth');   Podemos usar o middleware direto na rota
+
+
+Route::get('mensagem-teste',function(){
+    return new MensagemTesteMail();
+    //Mail::to('lucasmartinsde@gmail.com')->send(new MensagemTesteMail());
+    //return 'E-mail enviado com sucesso';
+    
+});
