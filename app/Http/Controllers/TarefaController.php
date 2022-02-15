@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NovaTarefaMail;
 use App\Models\Tarefa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,12 +23,9 @@ class TarefaController extends Controller
      */
     public function index()
     {
-
-            $id = Auth::user()->id;
-            $name = Auth::user()->name;
-            $email = Auth::user()->email;
-
-            return "ID| $id | Nome | $name |Email |$email, voce está logado";
+            $user_id = auth()->user()->id;
+            $tarefas = Tarefa::where('user_id',$user_id)->paginate(10);         
+            return view('tarefa.index',['tarefas' => $tarefas]);
 
         #utilizando classe 
 
@@ -61,7 +60,7 @@ class TarefaController extends Controller
      */
     public function create()
     {
-        //
+        return view('tarefa.create');
     }
 
     /**
@@ -72,7 +71,28 @@ class TarefaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $regras = [
+            'tarefa' => 'required|min:5|max:80',
+            'data_limite_conclusao' => 'required|date'
+        ];
+
+        $feedback = [
+            'required' => 'o campo :attribute deve possuir valor válido',
+            'tarefa.min' => 'O campo :attribute deve possuir no minimo 5 caracteres',
+            'tarefa.max' => 'O campo :attribute deve possuir no max 80 caracteres',
+            'data_limite_conclusao.date' => 'O campo :attribute deve ter uma data válida'
+        ];
+        $request->validate($regras,$feedback);
+
+        $tarefa = new Tarefa();
+        $dados = $request->all('tarefa','data_limite_conclusao');
+        $dados['user_id'] = auth()->user()->id;
+        $tarefa = Tarefa::create($dados);     
+        $destinario = auth()->user()->email;
+        Mail::to($destinario)->send(new NovaTarefaMail($tarefa));
+        return redirect()->route('tarefa.show',['tarefa' => $tarefa->id]);
+        
     }
 
     /**
@@ -83,7 +103,8 @@ class TarefaController extends Controller
      */
     public function show(Tarefa $tarefa)
     {
-        //
+        
+        return view('tarefa.show',['tarefa' => $tarefa]);
     }
 
     /**
