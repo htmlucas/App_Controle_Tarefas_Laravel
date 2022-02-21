@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TarefasExport;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NovaTarefaMail;
 use App\Models\Tarefa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TarefaController extends Controller
 {
@@ -115,7 +117,13 @@ class TarefaController extends Controller
      */
     public function edit(Tarefa $tarefa)
     {
-        //
+        $user_id = auth()->user()->id;
+        
+        if($tarefa->user_id == $user_id){
+            return view('tarefa.edit',['tarefa' => $tarefa]);
+        }
+
+        return view('acesso-negado');
     }
 
     /**
@@ -127,7 +135,30 @@ class TarefaController extends Controller
      */
     public function update(Request $request, Tarefa $tarefa)
     {
-        //
+
+        
+        if(!$tarefa->user_id == auth()->user()->id){
+            return view('acesso-negado');
+        }
+        
+
+        $regras = [
+            'tarefa' => 'required|min:5|max:80',
+            'data_limite_conclusao' => 'required|date'
+        ];
+
+        $feedback = [
+            'required' => 'o campo :attribute deve possuir valor válido',
+            'tarefa.min' => 'O campo :attribute deve possuir no minimo 5 caracteres',
+            'tarefa.max' => 'O campo :attribute deve possuir no max 80 caracteres',
+            'data_limite_conclusao.date' => 'O campo :attribute deve ter uma data válida'
+        ];
+        
+        $request->validate($regras,$feedback);
+
+        $tarefa->update($request->all());
+
+        return redirect()->route('tarefa.show',['tarefa' => $tarefa->id]);
     }
 
     /**
@@ -138,6 +169,15 @@ class TarefaController extends Controller
      */
     public function destroy(Tarefa $tarefa)
     {
-        //
+        if(!$tarefa->user_id == auth()->user()->id){
+            return view('acesso-negado');
+        }
+        $tarefa->delete();
+        return redirect()->route('tarefa.index');
+    }
+    public function exportacao(){
+        
+        return Excel::download(new TarefasExport, 'lista_de_tarefas.xlsx');
+
     }
 }

@@ -7,7 +7,19 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Tarefas</div>
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col-6">
+                      Tarefas 
+                    </div>
+                    <div class="col-6">
+                      <div class="float-right">
+                        <a href="{{route('tarefa.create')}}" style="margin:0px 2px;" class="float-right">Novo</a>
+                        <a href="{{route('tarefa.exportacao')}}" style="margin:0px 2px;" class="float-right">Exportar</a>
+                      </div>
+                  </div>
+                  </div>
+                </div>
 
                     <div class="card-body">
                         <table class="table">
@@ -16,14 +28,24 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Tarefa</th>
                                 <th scope="col">Data Limite Conclusão</th>
+                                <th></th>
+                                <th></th>
                               </tr>
                             </thead>
                             <tbody>
-                            @foreach($tarefas as $tarefa)
+                            @foreach($tarefas as $key => $t)
                                 <tr>
-                                    <th scope="row">{{$tarefa->id}}</th>
-                                    <td>{{$tarefa->tarefa}}</td>
-                                    <td>{{$tarefa->data_limite_conclusao}}</td>                            
+                                    <th scope="row">{{ $t['id'] }}</th>
+                                    <td>{{$t['tarefa']}}</td>
+                                    <td>{{ date('d/m/Y',strtotime($t['data_limite_conclusao'])) }}</td>                            
+                                    <td><a href="{{ route('tarefa.edit',$t['id'])}}">Editar</a></td>
+                                    <td>
+                                      <form id="form_{{$t['id']}}" action="{{ route('tarefa.destroy',['tarefa' => $t['id']])}}" method="post">
+                                        @method('DELETE')
+                                        @csrf                                        
+                                      </form>
+                                      <a href="#" onclick="document.getElementById('form_{{$t['id']}}').submit()">Excluir</a>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
