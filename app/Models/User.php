@@ -52,9 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerificarEmailNotification($this->name));
-
     }
-    public function tarefas(){
+
+    
+    public function tarefas()
+    {
         //has many (tem muitos)
         return $this->hasMany('App\Models\Tarefa');
     }
