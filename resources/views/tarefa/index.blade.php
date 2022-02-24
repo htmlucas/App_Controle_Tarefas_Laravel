@@ -13,11 +13,12 @@
                       Tarefas 
                     </div>
                     <div class="col-6">
-                      <div class="float-right">
-                        <a href="{{route('tarefa.create')}}" style="margin:0px 2px;" class="float-right">Novo</a>
-                        <a href="{{route('tarefa.exportacao',['extensao' => 'xlsx'])}}" style="margin:0px 2px;" class="float-right">Exportar XLSX</a>
-                        <a href="{{route('tarefa.exportacao',['extensao' => 'csv'])}}" style="margin:0px 2px;" class="float-right">Exportar CSV</a>
-                        <a href="{{route('tarefa.exportacao',['extensao' => 'pdf'])}}" style="margin:0px 2px;" class="float-right">Exportar PDF</a>
+                      <div class="float-right" >
+                        <a href="{{route('tarefa.create')}}" style="margin:0px 2px;" class="btn btn-primary mb-1">Novo</a>
+                        <a href="{{route('tarefa.exportacao',['extensao' => 'xlsx'])}}"  class="btn btn-outline-primary mb-1">Exportar XLSX</a>
+                        <a href="{{route('tarefa.exportacao',['extensao' => 'csv'])}}"  class="btn btn-outline-primary mb-1">Exportar CSV</a>
+                        <a href="{{route('tarefa.exportacao',['extensao' => 'pdf'])}}"  class="btn btn-outline-primary">Exportar PDF</a>
+                        <a href="{{route('tarefa.exportar')}}"  class="btn btn-outline-primary" target="_blank">Exportar PDF Usando dompdf</a>
                       </div>
                   </div>
                   </div>
@@ -40,13 +41,13 @@
                                     <th scope="row">{{ $t['id'] }}</th>
                                     <td>{{$t['tarefa']}}</td>
                                     <td>{{ date('d/m/Y',strtotime($t['data_limite_conclusao'])) }}</td>                            
-                                    <td><a href="{{ route('tarefa.edit',$t['id'])}}">Editar</a></td>
+                                    <td><a href="{{ route('tarefa.edit',$t['id'])}}" class="btn btn-warning">Editar</a></td>
                                     <td>
                                       <form id="form_{{$t['id']}}" action="{{ route('tarefa.destroy',['tarefa' => $t['id']])}}" method="post">
                                         @method('DELETE')
                                         @csrf                                        
                                       </form>
-                                      <a href="#" onclick="document.getElementById('form_{{$t['id']}}').submit()">Excluir</a>
+                                      <a href="#" onclick="document.getElementById('form_{{$t['id']}}').submit()" class="btn btn-danger">Excluir</a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -9,6 +9,7 @@ use App\Models\Tarefa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class TarefaController extends Controller
 {
@@ -80,7 +81,7 @@ class TarefaController extends Controller
         ];
 
         $feedback = [
-            'required' => 'o campo :attribute deve possuir valor válido',
+            'required' => 'O campo :attribute deve possuir valor válido',
             'tarefa.min' => 'O campo :attribute deve possuir no minimo 5 caracteres',
             'tarefa.max' => 'O campo :attribute deve possuir no max 80 caracteres',
             'data_limite_conclusao.date' => 'O campo :attribute deve ter uma data válida'
@@ -148,7 +149,7 @@ class TarefaController extends Controller
         ];
 
         $feedback = [
-            'required' => 'o campo :attribute deve possuir valor válido',
+            'required' => 'O campo :attribute deve possuir valor válido',
             'tarefa.min' => 'O campo :attribute deve possuir no minimo 5 caracteres',
             'tarefa.max' => 'O campo :attribute deve possuir no max 80 caracteres',
             'data_limite_conclusao.date' => 'O campo :attribute deve ter uma data válida'
@@ -184,5 +185,15 @@ class TarefaController extends Controller
         }
         
 
+    }
+
+    public function exportar(){
+        $tarefas = auth()->user()->tarefas()->get();
+        $pdf = PDF::loadView('tarefa.pdf',['tarefas' => $tarefas]);
+        $pdf->setPaper('a4','landscape'); // 2 parametros, o 1º é o tipo de papel: a4/letter..., e o 2º determina a orientacao da impressao: landscape(paisagem)/portrait(retrato)
+        return $pdf->stream('lista_de_tarefas.pdf'); // utilizando o metodo stream ele sera impresso no navegador
+        
+        
+        // return $pdf->download('lista_de_tarefas.pdf');
     }
 }

@@ -26,6 +26,9 @@ Auth::routes(['verify' => true]);
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('verified');
 
 Route::get('tarefas/exportacao/{extensao}',[App\Http\Controllers\TarefaController::class, 'exportacao'])->name('tarefa.exportacao');
+
+Route::get('tarefas/exportar',[App\Http\Controllers\TarefaController::class, 'exportar'])->name('tarefa.exportar');
+
 Route::resource('tarefa','App\Http\Controllers\TarefaController')->middleware('verified');
 //Route::resource('tarefa','App\Http\Controllers\TarefaController')->middleware('auth');   Podemos usar o middleware direto na rota
 

@@ -11,14 +11,23 @@
                     <form method="POST" action="{{ route('tarefa.store')}}">
                         @csrf
                         <div class="mb-3">
-                                <label class="form-label">Tarefa</label>
-                                <input type="text" class="form-control" name="tarefa" >
+                            <label class="form-label">Tarefa</label>
+                            <input type="text" class="form-control" name="tarefa" >                           
+                            
+                                
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Data Limite Conclusão</label>
-                            <input type="date" class="form-control" name="data_limite_conclusao">
+                        <div class="row justify-content-center mb-1">
+                            {{$errors->has('tarefa') ? $errors->first('tarefa') : ''}}
                         </div>
                         
+                        <div class="mb-3">
+                            <label class="form-label">Data Limite Conclusão</label>
+                            <input type="date" class="form-control" name="data_limite_conclusao">                          
+                           
+                        </div>
+                        <div class="row justify-content-center mb-1">
+                            {{$errors->has('data_limite_conclusao') ? $errors->first('data_limite_conclusao') : ''}}
+                        </div>
                         <button type="submit" class="btn btn-primary">Cadastrar</button>
                     </form>
                 </div>
