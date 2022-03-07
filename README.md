@@ -3,7 +3,7 @@
 
 ## Sobre
 
-Controle de Tarefas, é um sistema desenvolvido em Laravel Utilizando Laravel UI junto com Bootstrap. Sistema totalmente acadêmico, afim de aprimorar e relembrar lógica e alguns conhecimentos a funcionamento.
+Controle de Tarefas, é um sistema desenvolvido em Laravel Utilizando Laravel UI junto com Bootstrap. Sistema totalmente acadêmico, a fim de aprimorar e relembrar lógica e alguns conhecimentos a funcionamento.
 
 ## Instalação
 
